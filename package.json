@@ -23,9 +23,9 @@
   "dependencies": {
     "hubot": ">= 2.6.0 < 3.0.0",
     "hubot-scripts": ">= 2.5.0 < 3.0.0",
-    "hubot-irc": "^0.2.2"
-    "url": ""
-    "querystring": ""
+    "hubot-irc": "^0.2.2",
+    "url": "",
+    "querystring": "",
     "gitio2": "2.0.0"
   },
   "engines": {
