@@ -22,7 +22,8 @@ module.exports = (robot) ->
 
   robot.respond /DIE$/i, (msg) ->
     if robot.auth.hasRole(msg.envelope.user, "exit")
-	  msg.send "Goodbye, cruel world."
-	  process.exit 0
+      msg.send "Goodbye, cruel world."
+      process.exit 0
     else
-	  msg.send "Sorry, you do not have the required permissions to execute this command!"
+      msg.send "Sorry, you do not have the required permissions to execute this command!"
+
