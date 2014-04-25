@@ -26,5 +26,3 @@ module.exports = (robot) ->
 	  process.exit 0
     else
 	  msg.send "Sorry, you do not have the required permissions to execute this command!"
-	  
-	  
