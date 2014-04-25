@@ -15,7 +15,10 @@ module.exports = (robot) ->
     msg.send robot.adapterName
 
   robot.respond /ECHO (.*)$/i, (msg) ->
-    msg.send msg.match[1]
+    if robot.auth.hasRole(msg.envelope.user, "admin")
+      msg.send msg.match[1]
+    else
+      msg.send "Sorry, you do not have the required permissions to execute this command!"
 
   robot.respond /TIME$/i, (msg) ->
     msg.send "Server time is: #{new Date()}"
