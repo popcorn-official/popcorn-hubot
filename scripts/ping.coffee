@@ -20,3 +20,11 @@ module.exports = (robot) ->
   robot.respond /TIME$/i, (msg) ->
     msg.send "Server time is: #{new Date()}"
 
+  robot.respond /DIE$/i, (msg) ->
+    if robot.auth.hasRole(msg.envelope.user, "exit")
+	  msg.send "Goodbye, cruel world."
+	  process.exit 0
+    else
+	  msg.send "Sorry, you do not have the required permissions to execute this command!"
+	  
+	  
