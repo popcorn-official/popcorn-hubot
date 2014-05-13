@@ -1,1 +1,1 @@
-web: bin/hubot -a irc --name popcorntime
+web: bin/hubot -a irc --name popcorntime --alias '!'
