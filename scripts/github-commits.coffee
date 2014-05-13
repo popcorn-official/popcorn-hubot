@@ -40,10 +40,13 @@ module.exports = (robot) ->
       if payload.commits.length > 0
         commitWord = if payload.commits.length > 1 then "commits" else "commit"
         robot.send user, "Got #{payload.commits.length} new #{commitWord} from #{payload.commits[0].author.name} on #{payload.repository.name}"
-        for commit in payload.commits
-          do (commit) ->
-            gitio commit.url, (err, data) ->
-              robot.send user, "  * #{commit.message} (#{if err then commit.url else data})"
+        if payload.commits.length < 6
+          for commit in payload.commits
+            do (commit) ->
+              gitio commit.url, (err, data) ->
+                robot.send user, "  * #{commit.message} (#{if err then commit.url else data})"
+        else
+          robot.send user, "Too many commits to list, limited to 5 simultaneous commits!"
       else
         if payload.created
           robot.send user, "#{payload.pusher.name} created: #{payload.ref}: #{payload.base_ref}"

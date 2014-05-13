@@ -14,12 +14,14 @@ module.exports = (robot) ->
     msg.send output
 
   robot.respond /show users$/i, (msg) ->
-    response = ""
+    if robot.auth.hasRole(msg.envelope.user, "admin")
+        response = ""
 
-    for own key, user of robot.brain.data.users
-      response += "#{user.id} #{user.name}"
-      response += " <#{user.email_address}>" if user.email_address
-      response += "\n"
+        for own key, user of robot.brain.data.users
+          response += "#{user.id} #{user.name}"
+          response += " <#{user.email_address}>" if user.email_address
+          response += "\n"
 
-    msg.send response
-
+        msg.send response
+    else
+        msg.send "Sorry, you do not have the required permissions to execute this command!"
