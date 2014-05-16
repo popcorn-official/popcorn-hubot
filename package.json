@@ -26,7 +26,9 @@
     "hubot-irc": "^0.2.2",
     "url": "",
     "querystring": "",
-    "gitio2": "2.0.0"
+    "gitio2": "2.0.0",
+    "htmlparser": "1.7.6",
+    "soupselect": "0.2.0"
   },
   "engines": {
     "node": ">= 0.8.x",
