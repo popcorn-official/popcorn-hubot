@@ -36,7 +36,7 @@ module.exports = (robot) ->
     return if req.body.zen? # initial ping
     push = req.body
 
-	try
+    try
       if push.commits.length > 0
         commitWord = if push.commits.length > 1 then "commits" else "commit"
         robot.send user, "Got #{push.commits.length} new #{commitWord} from #{push.commits[0].author.name} on #{push.repository.name} (Branch: #{push.ref})"
