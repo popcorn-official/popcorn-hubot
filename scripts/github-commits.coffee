@@ -39,7 +39,7 @@ module.exports = (robot) ->
 
       if payload.commits.length > 0
         commitWord = if payload.commits.length > 1 then "commits" else "commit"
-        robot.send user, "Got #{payload.commits.length} new #{commitWord} from #{payload.commits[0].author.name} on #{payload.repository.name}  (Branch: #{payload.ref})"
+        robot.send user, "Got #{payload.commits.length} new #{commitWord} from #{payload.commits[0].author.name} on #{payload.repository.name}  (Branch: #{payload.base_ref})"
         if payload.commits.length < 6
           for commit in payload.commits
             do (commit) ->
