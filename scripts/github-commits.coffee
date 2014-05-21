@@ -33,25 +33,25 @@ module.exports = (robot) ->
     user.room = query.room if query.room
     user.type = query.type if query.type
 
-    return if req.body.zen? # initial ping
-    push = req.body
-
     try
-      if push.commits.length > 0
-        commitWord = if push.commits.length > 1 then "commits" else "commit"
-        robot.send user, "Got #{push.commits.length} new #{commitWord} from #{push.commits[0].author.name} on #{push.repository.name} (Branch: #{push.ref})"
-        if push.commits.length < 6
-          for commit in push.commits
+      payload = JSON.parse req.body.payload
+      return if payload.zen? # initial ping
+
+      if payload.commits.length > 0
+        commitWord = if payload.commits.length > 1 then "commits" else "commit"
+        robot.send user, "Got #{payload.commits.length} new #{commitWord} from #{payload.commits[0].author.name} on #{payload.repository.name}  (Branch: #{payload.ref})"
+        if payload.commits.length < 6
+          for commit in payload.commits
             do (commit) ->
               gitio commit.url, (err, data) ->
                 robot.send user, "  * #{commit.message} (#{if err then commit.url else data})"
         else
           robot.send user, "Too many commits to list, limited to 5 simultaneous commits!"
       else
-        if push.created
-          robot.send user, "#{push.pusher.name} created: #{push.ref}: #{push.base_ref}"
-        if push.deleted
-          robot.send user, "#{push.pusher.name} deleted: #{push.ref}"
+        if payload.created
+          robot.send user, "#{payload.pusher.name} created: #{payload.ref}: #{payload.base_ref}"
+        if payload.deleted
+          robot.send user, "#{payload.pusher.name} deleted: #{payload.ref}"
 
     catch error
-      console.log "github-commits error: #{error}. Push: #{push}"
+      console.log "github-commits error: #{error}. Payload: #{req.body.payload}"
