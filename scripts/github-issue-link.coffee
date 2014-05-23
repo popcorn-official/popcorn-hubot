@@ -28,7 +28,7 @@ module.exports = (robot) ->
 
   githubIgnoreUsers = process.env.HUBOT_GITHUB_ISSUE_LINK_IGNORE_USERS
   if githubIgnoreUsers == undefined
-    githubIgnoreUsers = "github|hubot"
+    githubIgnoreUsers = "github|hubot|travis-ci"
 
   robot.hear /((\S*|^)?#(\d+)).*/, (msg) ->
     return if msg.message.user.name.match(new RegExp(githubIgnoreUsers, "gi"))
