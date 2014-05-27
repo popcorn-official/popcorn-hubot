@@ -2,7 +2,7 @@
 #   Get the status of Popcorn Time's StatusPage.io
 #
 # Dependencies:
-#   None
+#   "sugar": ""
 #
 # Commands:
 #   hubot status
@@ -11,6 +11,8 @@
 #   frdmn <j@frd.mn>
 
 statusUrl = "http://status.get-popcorn.com/index.json"
+
+require("sugar")
 
 module.exports = (robot) ->
   robot.respond /status( me)?$/i, (msg) ->
@@ -31,7 +33,7 @@ module.exports = (robot) ->
           # For each component
           for component in response.components
             # Append to statusLine
-            statusLine += "#{component.name}: #{component.status.replace /_/, " "}, "
+            statusLine += "#{component.name}: #{component.status.humanize()}, "
             # Check if there is a non-operational component
             if component.status != "operational"
               # Increment incidents
