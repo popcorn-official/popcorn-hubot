@@ -27,8 +27,6 @@
     "url": "",
     "querystring": "",
     "gitio2": "2.0.0",
-    "htmlparser": "1.7.6",
-    "soupselect": "0.2.0",
     "githubot": "0.4.x"
   },
   "engines": {
