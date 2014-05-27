@@ -27,7 +27,8 @@
     "url": "",
     "querystring": "",
     "gitio2": "2.0.0",
-    "githubot": "0.4.x"
+    "githubot": "0.4.x",
+    "sugar": ""
   },
   "engines": {
     "node": ">= 0.8.x",
