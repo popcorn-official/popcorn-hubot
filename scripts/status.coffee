@@ -1,9 +1,8 @@
 # Description:
-#   Scrape the status of Popcorn Time's StatusPage.io
+#   Get the status of Popcorn Time's StatusPage.io
 #
 # Dependencies:
-#   "htmlparser": "1.7.6"
-#   "soupselect": "0.2.0"
+#   None
 #
 # Commands:
 #   hubot status
@@ -11,39 +10,47 @@
 # Author:
 #   frdmn <j@frd.mn>
 
-HtmlParser = require "htmlparser"
-Select     = require("soupselect").select
-
-statusUrl = "http://status.get-popcorn.com"
+statusUrl = "http://status.get-popcorn.com/index.json"
 
 module.exports = (robot) ->
   robot.respond /status( me)?$/i, (msg) ->
     msg.http(statusUrl)
       .get() (err, res, body) ->
         if err
-            msg.send "There was an error fetching the status page!"
+          # Error => let user know 
+          msg.send "There was an error fetching the status page!"
         else
-            handler = new HtmlParser.DefaultHandler()
-            parser = new HtmlParser.Parser handler
-            parser.parseComplete body
+          # Variables
+          incidentsInProgress = 0
+          statusLine = ""
+          activeIncidents = []
 
-            msgText = ""
+          # Parse JSON
+          response = JSON.parse body
 
-            for component in Select(handler.dom, ".component-container")
-              # Parse the service name
-              element = component.children[0].children[0].data
-              # Parse the CSS classes of the service name 
-              elementClass = component.children[1].data.split " "[-1..]
-              isGreen = /green/i.test(elementClass)
+          # For each component
+          for component in response.components
+            # Append to statusLine
+            statusLine += "#{component.name}: #{component.status.replace /_/, " "}, "
+            # Check if there is a non-operational component
+            if component.status != "operational"
+              # Increment incidents
+              ++incidentsInProgress
+          
+          # Remove trailing ", " in statusLine
+          statusLine = statusLine.substring(0, statusLine.length - 2);
 
-              # Check if status is green => online
-              if isGreen
-                msgText += "#{element} is online, "
-              # If not, it's offline
-              else 
-                msgText += "#{element} is offline, "
+          # Check if there are incidents in progress
+          if incidentsInProgress != 0
+            # Append info to statusLine
+            statusLine += " - #{incidentsInProgress} active incident:"
+            # Get more informations about incidents 
+            for incident in response.incidents
+              # If not "completed" or "resolved"
+              if incident.status != "completed" && incident.status != "resolved"
+                # Add to activeIncidents Array
+                activeIncidents.push "* #{incident.name}: #{incident.status} - #{incident.incident_updates[0].body[0...50]}... (#{incident.shortlink})"
 
-            # Remove trailing ", "
-            msgText = msgText.substring(0, msgText.length - 2);
-            # Send to user
-            msg.send msgText
+          # Send output
+          msg.send statusLine
+          msg.send activeIncidents.join '\n'
