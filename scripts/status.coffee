@@ -10,7 +10,7 @@
 # Author:
 #   frdmn <j@frd.mn>
 
-statusUrl = "http://status.get-popcorn.com/index.json"
+statusUrl = "http://status.popcorntime.io/index.json"
 
 require("sugar")
 
@@ -52,6 +52,9 @@ module.exports = (robot) ->
               if incident.status != "completed" && incident.status != "resolved"
                 # Add to activeIncidents Array
                 activeIncidents.push "* #{incident.name}: #{incident.status} - #{incident.incident_updates[0].body[0...50]}... (#{incident.shortlink})"
+          else
+            # Append info to statusLine
+            statusLine += " - Everything works as expected!"
 
           # Send output
           msg.send statusLine
